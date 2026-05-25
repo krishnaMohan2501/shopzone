@@ -8,7 +8,30 @@ Full-stack e-commerce platform: **Java 17 + Spring Boot 3.2 + PostgreSQL + React
 | Admin    | admin@shopzone.com     | admin123  |
 | Customer | Register on the site   | —         |
 
-## Prerequisites
+## ⚡ Easiest Way — Docker (recommended)
+
+Only requires [Docker Desktop](https://www.docker.com/products/docker-desktop/). No Java, no PostgreSQL needed.
+
+```bash
+# Clone and run — that's it
+git clone https://github.com/krishnaMohan2501/shopzone.git
+cd shopzone
+docker compose up --build
+```
+
+Open **http://localhost:8080**
+
+To stop: `Ctrl+C` then `docker compose down`
+
+**From CD (scripts folder):**
+- Windows: `docker-run.bat`
+- Linux/Mac: `bash docker-run.sh`
+
+---
+
+## Manual Setup (without Docker)
+
+### Prerequisites
 - **Java 17** (e.g. Amazon Corretto 17 — https://adoptium.net/)
 - **PostgreSQL 15+** running on port 5432
 

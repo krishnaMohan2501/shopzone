@@ -6,28 +6,51 @@
 GITHUB REPOSITORY:
   https://github.com/krishnaMohan2501/shopzone
 
+=================================================
+  OPTION A: Run with Docker (EASIEST — Recommended)
+=================================================
+
+REQUIREMENT: Docker Desktop installed
+  Download: https://www.docker.com/products/docker-desktop/
+
+STEPS:
+  1. Install Docker Desktop and start it
+  2. Open terminal / command prompt in THIS folder
+  3. Run:
+       Windows:    docker-run.bat
+       Linux/Mac:  bash docker-run.sh
+  4. Wait ~3 minutes for first-time build
+  5. Open browser: http://localhost:8080
+
+That's it. No Java, no PostgreSQL installation needed.
+
+=================================================
+  OPTION B: Run with JAR (needs Java 17 + PostgreSQL)
+=================================================
+
 REQUIREMENTS:
-  - Java 17 or higher
-    Download: https://adoptium.net/
-  - PostgreSQL 15+
-    Download: https://www.postgresql.org/download/
+  - Java 17+  -> https://adoptium.net/
+  - PostgreSQL 15+ -> https://www.postgresql.org/download/
 
-SETUP STEPS:
-  1. Install Java 17 and PostgreSQL if not installed
-  2. Start PostgreSQL service
-  3. Open terminal / command prompt in this folder
-  4. Create database:
+STEPS:
+  1. Start PostgreSQL and create the database:
        psql -U postgres -f setup.sql
-  5. Start the application:
-       Windows: Double-click run.bat (or: java -jar shopzone-1.0.0.jar)
-       Linux/Mac: bash run.sh
-  6. Open browser: http://localhost:8080
+  2. Start the application:
+       Windows:    run.bat
+       Linux/Mac:  bash run.sh
+  3. Open browser: http://localhost:8080
 
-DEMO LOGIN:
+=================================================
+  DEMO LOGIN
+=================================================
+
   Admin:    admin@shopzone.com  /  admin123
   Customer: Register a new account on the site
 
-FEATURES:
+=================================================
+  FEATURES
+=================================================
+
   - User registration and login (JWT authentication)
   - Product catalog with search and category filter
   - Shopping cart with quantity management
@@ -35,9 +58,13 @@ FEATURES:
   - Order history for customers
   - Admin panel: manage products (CRUD) and order statuses
 
-TECH STACK:
+=================================================
+  TECH STACK
+=================================================
+
   Backend:  Java 17, Spring Boot 3.2, Spring Security 6, Spring Data JPA
   Database: PostgreSQL 15
   Frontend: React 18, Vite, Tailwind CSS, React Router 6
   Auth:     JWT (jjwt 0.12)
   Build:    Maven 3 (single executable JAR, frontend bundled inside)
+  Docker:   Multi-stage build, docker compose
