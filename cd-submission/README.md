@@ -62,4 +62,4 @@ This builds the React frontend and bundles it inside the JAR — **single file d
 | PUT | /api/orders/admin/:id/status | Admin |
 
 ## GitHub
-https://github.com/krishnaMohan2501/shopzone
+https://github.com/YOUR_USERNAME/shopzone

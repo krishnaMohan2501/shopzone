@@ -1,0 +1,43 @@
+=================================================
+  ShopZone — Online Shopping Platform
+  B.Tech Final Year Project
+=================================================
+
+GITHUB REPOSITORY:
+  https://github.com/krishnaMohan2501/shopzone
+
+REQUIREMENTS:
+  - Java 17 or higher
+    Download: https://adoptium.net/
+  - PostgreSQL 15+
+    Download: https://www.postgresql.org/download/
+
+SETUP STEPS:
+  1. Install Java 17 and PostgreSQL if not installed
+  2. Start PostgreSQL service
+  3. Open terminal / command prompt in this folder
+  4. Create database:
+       psql -U postgres -f setup.sql
+  5. Start the application:
+       Windows: Double-click run.bat (or: java -jar shopzone-1.0.0.jar)
+       Linux/Mac: bash run.sh
+  6. Open browser: http://localhost:8080
+
+DEMO LOGIN:
+  Admin:    admin@shopzone.com  /  admin123
+  Customer: Register a new account on the site
+
+FEATURES:
+  - User registration and login (JWT authentication)
+  - Product catalog with search and category filter
+  - Shopping cart with quantity management
+  - Checkout and order placement
+  - Order history for customers
+  - Admin panel: manage products (CRUD) and order statuses
+
+TECH STACK:
+  Backend:  Java 17, Spring Boot 3.2, Spring Security 6, Spring Data JPA
+  Database: PostgreSQL 15
+  Frontend: React 18, Vite, Tailwind CSS, React Router 6
+  Auth:     JWT (jjwt 0.12)
+  Build:    Maven 3 (single executable JAR, frontend bundled inside)
