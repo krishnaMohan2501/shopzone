@@ -99,6 +99,7 @@
                     <installDirectory>target</installDirectory>
                     <nodeVersion>${node.version}</nodeVersion>
                     <npmVersion>${npm.version}</npmVersion>
+                    <skip>${skipFrontend}</skip>
                 </configuration>
                 <executions>
                     <execution>
