@@ -15,12 +15,14 @@ public class CartService {
     private final ProductRepository productRepo;
     private final UserRepository userRepo;
 
+    @Transactional
     private Cart getOrCreateCart(String email) {
         User user = userRepo.findByEmail(email).orElseThrow();
         return cartRepo.findByUserId(user.getId())
                 .orElseGet(() -> cartRepo.save(Cart.builder().user(user).build()));
     }
 
+    @Transactional(readOnly = true)
     public Cart getCart(String email) { return getOrCreateCart(email); }
 
     @Transactional
@@ -43,12 +45,14 @@ public class CartService {
     @Transactional
     public Cart updateItem(String email, Long itemId, Integer quantity) {
         Cart cart = getOrCreateCart(email);
-        cart.getItems().stream()
-            .filter(i -> i.getId().equals(itemId)).findFirst()
-            .ifPresent(item -> {
-                if (quantity <= 0) cart.getItems().remove(item);
-                else item.setQuantity(quantity);
-            });
+        if (quantity == null || quantity <= 0) {
+            cart.getItems().removeIf(i -> i.getId().equals(itemId));
+        } else {
+            cart.getItems().stream()
+                .filter(i -> i.getId().equals(itemId))
+                .findFirst()
+                .ifPresent(item -> item.setQuantity(quantity));
+        }
         return cartRepo.save(cart);
     }
 

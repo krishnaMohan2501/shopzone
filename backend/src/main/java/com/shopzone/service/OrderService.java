@@ -63,8 +63,13 @@ public class OrderService {
     }
 
     public Order updateStatus(Long id, String status) {
-        Order order = orderRepo.findById(id).orElseThrow();
-        order.setStatus(Order.Status.valueOf(status));
+        Order order = orderRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found: " + id));
+        try {
+            order.setStatus(Order.Status.valueOf(status));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid status: " + status);
+        }
         return orderRepo.save(order);
     }
 }
