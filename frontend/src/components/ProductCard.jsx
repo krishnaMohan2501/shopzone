@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
@@ -6,19 +7,26 @@ export default function ProductCard({ product }) {
   const { cart, addToCart, updateItem, removeItem } = useCart()
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [busy, setBusy] = useState(false)
 
   const cartItem = cart.items?.find(i => i.product.id === product.id)
 
-  const handleAdd = () => {
-    if (!user) { navigate('/login'); return }
-    addToCart(product.id)
+  const withBusy = fn => async () => {
+    if (busy) return
+    setBusy(true)
+    try { await fn() } finally { setBusy(false) }
   }
 
-  const handleIncrease = () => updateItem(cartItem.id, cartItem.quantity + 1)
-  const handleDecrease = () => {
-    if (cartItem.quantity === 1) removeItem(cartItem.id)
-    else updateItem(cartItem.id, cartItem.quantity - 1)
-  }
+  const handleAdd = withBusy(() => {
+    if (!user) { navigate('/login'); return Promise.resolve() }
+    return addToCart(product.id)
+  })
+
+  const handleIncrease = withBusy(() => updateItem(cartItem.id, cartItem.quantity + 1))
+  const handleDecrease = withBusy(() => {
+    if (cartItem.quantity === 1) return removeItem(cartItem.id)
+    return updateItem(cartItem.id, cartItem.quantity - 1)
+  })
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
@@ -50,16 +58,18 @@ export default function ProductCard({ product }) {
           <div className="mt-3 flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-3 py-1">
             <button
               onClick={handleDecrease}
-              className="w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-blue-100 rounded-full text-xl font-bold transition"
+              disabled={busy}
+              className="w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-blue-100 disabled:opacity-40 rounded-full text-xl font-bold transition"
             >
               −
             </button>
             <span className="font-semibold text-blue-700 text-base w-6 text-center">
-              {cartItem.quantity}
+              {busy ? '…' : cartItem.quantity}
             </span>
             <button
               onClick={handleIncrease}
-              className="w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-blue-100 rounded-full text-xl font-bold transition"
+              disabled={busy}
+              className="w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-blue-100 disabled:opacity-40 rounded-full text-xl font-bold transition"
             >
               +
             </button>
@@ -67,10 +77,10 @@ export default function ProductCard({ product }) {
         ) : (
           <button
             onClick={handleAdd}
-            disabled={product.stock === 0}
+            disabled={product.stock === 0 || busy}
             className="mt-3 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white py-2 rounded-lg transition font-medium"
           >
-            {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+            {busy ? 'Adding…' : product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
           </button>
         )}
       </div>

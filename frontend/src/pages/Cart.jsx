@@ -1,9 +1,17 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 
 export default function Cart() {
   const { cart, updateItem, removeItem } = useCart()
   const navigate = useNavigate()
+  const [busyId, setBusyId] = useState(null)
+
+  const withBusy = (id, fn) => async () => {
+    if (busyId) return
+    setBusyId(id)
+    try { await fn() } finally { setBusyId(null) }
+  }
 
   const total = cart.items?.reduce((sum, i) => sum + i.product.price * i.quantity, 0) || 0
 
@@ -31,15 +39,18 @@ export default function Cart() {
               <p className="text-blue-600 font-bold">₹{item.product.price}</p>
             </div>
             <div className="flex items-center gap-2">
-              <button onClick={() => updateItem(item.id, item.quantity - 1)}
-                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 font-bold transition">-</button>
-              <span className="w-8 text-center font-medium">{item.quantity}</span>
-              <button onClick={() => updateItem(item.id, item.quantity + 1)}
-                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 font-bold transition">+</button>
+              <button onClick={withBusy(item.id, () => updateItem(item.id, item.quantity - 1))}
+                disabled={busyId === item.id}
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-40 font-bold transition">−</button>
+              <span className="w-8 text-center font-medium">{busyId === item.id ? '…' : item.quantity}</span>
+              <button onClick={withBusy(item.id, () => updateItem(item.id, item.quantity + 1))}
+                disabled={busyId === item.id}
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-40 font-bold transition">+</button>
             </div>
             <p className="w-24 text-right font-bold">₹{(item.product.price * item.quantity).toFixed(2)}</p>
-            <button onClick={() => removeItem(item.id)}
-              className="text-red-400 hover:text-red-600 transition ml-2">✕</button>
+            <button onClick={withBusy(item.id, () => removeItem(item.id))}
+              disabled={busyId === item.id}
+              className="text-red-400 hover:text-red-600 disabled:opacity-40 transition ml-2">✕</button>
           </div>
         ))}
         <div className="p-4 bg-gray-50 flex justify-between items-center">
