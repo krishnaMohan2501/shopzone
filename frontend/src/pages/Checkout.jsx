@@ -16,8 +16,8 @@ export default function Checkout() {
     e.preventDefault()
     setLoading(true); setError('')
     try {
-      await api.post('/orders', { shippingAddress: address })
-      navigate('/orders')
+      const { data: order } = await api.post('/orders', { shippingAddress: address })
+      navigate('/payment', { state: { orderId: order.id, total, address } })
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to place order')
     } finally {

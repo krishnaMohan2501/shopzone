@@ -28,10 +28,15 @@ export function CartProvider({ children }) {
     setCart(data)
   }
 
+  const refreshCart = async () => {
+    if (user) api.get('/cart').then(r => setCart(r.data)).catch(() => {})
+    else setCart({ items: [] })
+  }
+
   const itemCount = cart.items?.reduce((sum, i) => sum + i.quantity, 0) || 0
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateItem, removeItem, itemCount }}>
+    <CartContext.Provider value={{ cart, addToCart, updateItem, removeItem, refreshCart, itemCount }}>
       {children}
     </CartContext.Provider>
   )

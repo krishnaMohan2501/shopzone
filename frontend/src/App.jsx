@@ -12,6 +12,8 @@ import Checkout from './pages/Checkout'
 import Orders from './pages/Orders'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Payment from './pages/Payment'
+import ThankYou from './pages/ThankYou'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminProducts from './pages/admin/AdminProducts'
 import AdminOrders from './pages/admin/AdminOrders'
@@ -32,6 +34,8 @@ export default function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
                 <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+                <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+                <Route path="/thank-you" element={<ProtectedRoute><ThankYou /></ProtectedRoute>} />
                 <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
                 <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
                 <Route path="/admin/products" element={<ProtectedRoute adminOnly><AdminProducts /></ProtectedRoute>} />
