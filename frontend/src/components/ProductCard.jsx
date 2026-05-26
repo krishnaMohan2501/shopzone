@@ -10,6 +10,7 @@ export default function ProductCard({ product }) {
   const [busy, setBusy] = useState(false)
 
   const cartItem = cart.items?.find(i => i.product.id === product.id)
+  const availableStock = product.stock - (cartItem?.quantity || 0)
 
   const withBusy = fn => async () => {
     if (busy) return
@@ -22,7 +23,10 @@ export default function ProductCard({ product }) {
     return addToCart(product.id)
   })
 
-  const handleIncrease = withBusy(() => updateItem(cartItem.id, cartItem.quantity + 1))
+  const handleIncrease = withBusy(() => {
+    if (cartItem.quantity >= product.stock) return Promise.resolve()
+    return updateItem(cartItem.id, cartItem.quantity + 1)
+  })
   const handleDecrease = withBusy(() => {
     if (cartItem.quantity === 1) return removeItem(cartItem.id)
     return updateItem(cartItem.id, cartItem.quantity - 1)
@@ -49,8 +53,8 @@ export default function ProductCard({ product }) {
         <p className="text-gray-500 text-sm mt-1 line-clamp-2">{product.description}</p>
         <div className="flex items-center justify-between mt-3">
           <span className="text-lg font-bold text-blue-600">₹{product.price}</span>
-          <span className={`text-xs ${product.stock > 0 ? 'text-green-600' : 'text-red-500'}`}>
-            {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+          <span className={`text-xs ${availableStock > 0 ? 'text-green-600' : 'text-red-500'}`}>
+            {availableStock > 0 ? `${availableStock} in stock` : 'Out of stock'}
           </span>
         </div>
 
@@ -68,7 +72,7 @@ export default function ProductCard({ product }) {
             </span>
             <button
               onClick={handleIncrease}
-              disabled={busy}
+              disabled={busy || cartItem.quantity >= product.stock}
               className="w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-blue-100 disabled:opacity-40 rounded-full text-xl font-bold transition"
             >
               +
@@ -80,7 +84,7 @@ export default function ProductCard({ product }) {
             disabled={product.stock === 0 || busy}
             className="mt-3 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white py-2 rounded-lg transition font-medium"
           >
-            {busy ? 'Adding…' : product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+            {busy ? 'Adding…' : availableStock > 0 ? 'Add to Cart' : 'Out of Stock'}
           </button>
         )}
       </div>
