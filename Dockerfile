@@ -1,5 +1,6 @@
 # Stage 1: Build (Maven + Node inside Docker — no local installs needed)
-FROM maven:3.9-eclipse-temurin-17-alpine AS builder
+# Using non-alpine variants for ARM64 (Apple Silicon) + AMD64 compatibility
+FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
@@ -14,7 +15,7 @@ COPY backend/src backend/src/
 RUN cd backend && mvn clean package -DskipTests -q
 
 # Stage 2: Runtime (lean JRE only)
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
