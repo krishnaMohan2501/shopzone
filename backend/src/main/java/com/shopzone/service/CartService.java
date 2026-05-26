@@ -15,14 +15,13 @@ public class CartService {
     private final ProductRepository productRepo;
     private final UserRepository userRepo;
 
-    @Transactional
     private Cart getOrCreateCart(String email) {
         User user = userRepo.findByEmail(email).orElseThrow();
-        return cartRepo.findByUserId(user.getId())
+        return cartRepo.findByUserIdWithItems(user.getId())
                 .orElseGet(() -> cartRepo.save(Cart.builder().user(user).build()));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Cart getCart(String email) { return getOrCreateCart(email); }
 
     @Transactional
