@@ -12,6 +12,7 @@ import Checkout from './pages/Checkout'
 import Orders from './pages/Orders'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ErrorBoundary from './components/ErrorBoundary'
 import Payment from './pages/Payment'
 import ThankYou from './pages/ThankYou'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -26,6 +27,7 @@ export default function App() {
           <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className="flex-1">
+              <ErrorBoundary>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
@@ -41,6 +43,7 @@ export default function App() {
                 <Route path="/admin/products" element={<ProtectedRoute adminOnly><AdminProducts /></ProtectedRoute>} />
                 <Route path="/admin/orders" element={<ProtectedRoute adminOnly><AdminOrders /></ProtectedRoute>} />
               </Routes>
+              </ErrorBoundary>
             </main>
             <Footer />
           </div>

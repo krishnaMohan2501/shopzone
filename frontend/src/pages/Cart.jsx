@@ -13,9 +13,10 @@ export default function Cart() {
     try { await fn() } finally { setBusyId(null) }
   }
 
-  const total = cart.items?.reduce((sum, i) => sum + i.product.price * i.quantity, 0) || 0
+  const items = Array.isArray(cart.items) ? cart.items : []
+  const total = items.reduce((sum, i) => sum + (Number(i.product?.price) || 0) * (i.quantity || 0), 0)
 
-  if (!cart.items?.length) return (
+  if (!items.length) return (
     <div className="max-w-2xl mx-auto px-4 py-16 text-center">
       <p className="text-6xl mb-4">🛒</p>
       <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
@@ -30,7 +31,7 @@ export default function Cart() {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
       <div className="bg-white rounded-2xl shadow-md overflow-hidden">
-        {cart.items.map(item => (
+        {items.map(item => (
           <div key={item.id} className="flex items-center gap-4 p-4 border-b last:border-b-0">
             <img src={item.product.imageUrl || 'https://via.placeholder.com/80'}
               alt={item.product.name} className="w-20 h-20 object-cover rounded-lg" />

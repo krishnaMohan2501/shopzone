@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Navigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 
 export default function Payment() {
@@ -9,10 +9,7 @@ export default function Payment() {
   const [processing, setProcessing] = useState(false)
   const [card, setCard] = useState({ number: '', expiry: '', cvv: '', name: '' })
 
-  if (!state?.orderId) {
-    navigate('/')
-    return null
-  }
+  if (!state?.orderId) return <Navigate to="/" replace />
 
   const formatCardNumber = v =>
     v.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim()

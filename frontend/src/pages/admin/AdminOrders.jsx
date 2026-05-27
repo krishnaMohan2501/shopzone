@@ -11,7 +11,7 @@ const statusColors = {
 export default function AdminOrders() {
   const [orders, setOrders] = useState([])
 
-  const load = () => api.get('/orders/admin/all').then(r => setOrders(r.data))
+  const load = () => { api.get('/orders/admin/all').then(r => setOrders(r.data)) }
   useEffect(load, [])
 
   const updateStatus = async (id, status) => {
